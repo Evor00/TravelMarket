@@ -1,4 +1,4 @@
-package com.miempresa.travelmarket.ui.favoritos
+package com.miempresa.travelmarket.ui.transporte
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
@@ -13,11 +13,11 @@ import androidx.navigation.NavHostController
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun FavoriteScreen(navController: NavHostController) {
+fun TransporteScreen(navController: NavHostController) {
     Scaffold(
         topBar = {
             TopAppBar(
-                title = { Text("Favoritos") },
+                title = { Text("Transporte") },
                 navigationIcon = {
                     IconButton(onClick = { navController.popBackStack() }) {
                         Icon(
@@ -35,7 +35,7 @@ fun FavoriteScreen(navController: NavHostController) {
                 .padding(padding),
             contentAlignment = Alignment.Center
         ) {
-            Text("Pantalla de Favoritos (Vacía)")
+            Text("Pantalla de Transporte (Vacía)")
         }
     }
 }
