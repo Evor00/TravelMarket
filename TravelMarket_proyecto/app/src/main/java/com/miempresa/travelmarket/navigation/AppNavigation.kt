@@ -7,7 +7,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.miempresa.travelmarket.ui.home.HomeScreen
 import com.miempresa.travelmarket.ui.detalle.DetailScreen
-import com.miempresa.travelmarket.ui.perfil.ProfileScreen
+import com.miempresa.travelmarket.ui.favoritos.FavoriteScreen
 
 @Composable
 fun AppNavigation() {
@@ -19,6 +19,6 @@ fun AppNavigation() {
     ) {
         composable("home") { HomeScreen(navController) }
         composable("detalle") { DetailScreen(navController) }
-        composable("perfil") { ProfileScreen(navController) }
+        composable("foviritos") { FavoriteScreen(navController) }
     }
 }

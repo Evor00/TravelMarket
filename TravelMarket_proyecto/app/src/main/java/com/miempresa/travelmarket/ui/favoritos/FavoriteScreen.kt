@@ -1,4 +1,4 @@
-package com.miempresa.travelmarket.ui.perfil
+package com.miempresa.travelmarket.ui.favoritos
 
 import androidx.compose.foundation.layout.*
 import androidx.compose.material3.*
@@ -9,10 +9,10 @@ import androidx.navigation.NavController
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun ProfileScreen(navController: NavController) {
+fun FavoriteScreen(navController: NavController) {
     Scaffold(
         topBar = {
-            TopAppBar(title = { Text("Perfil") })
+            TopAppBar(title = { Text("Favoritos") })
         }
     ) { padding ->
         Box(
@@ -21,7 +21,7 @@ fun ProfileScreen(navController: NavController) {
                 .padding(padding),
             contentAlignment = Alignment.Center
         ) {
-            Text("Pantalla Perfil")
+            Text("Mis Favoritos")
         }
     }
 }
