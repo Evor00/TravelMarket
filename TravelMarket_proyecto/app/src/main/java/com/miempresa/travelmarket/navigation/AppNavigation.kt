@@ -6,7 +6,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.miempresa.travelmarket.ui.home.HomeScreen
-import com.miempresa.travelmarket.ui.detalle.DetailScreen
+import com.miempresa.travelmarket.ui.detalle.DetalleScreen
 import com.miempresa.travelmarket.ui.favoritos.FavoriteScreen
 
 @Composable
@@ -18,7 +18,10 @@ fun AppNavigation() {
         startDestination = "home"
     ) {
         composable("home") { HomeScreen(navController) }
-        composable("detalle") { DetailScreen(navController) }
-        composable("foviritos") { FavoriteScreen(navController) }
+        composable("detalle/{id}") { backStackEntry ->
+            val id = backStackEntry.arguments?.getString("id")
+            DetalleScreen(id = id)
+        }
+        composable("favoritos") { FavoriteScreen(navController) }
     }
 }

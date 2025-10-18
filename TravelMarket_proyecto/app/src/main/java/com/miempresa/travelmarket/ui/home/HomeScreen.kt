@@ -3,11 +3,21 @@ package com.miempresa.travelmarket.ui.home
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.aspectRatio
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Favorite
+import androidx.compose.material.icons.filled.Home
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -18,20 +28,15 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
-import com.miempresa.travelmarket.R
-import com.miempresa.travelmarket.model.Destino
+import com.miempresa.travelmarket.model.Evento
+import com.miempresa.travelmarket.model.Lugar
+import com.miempresa.travelmarket.model.Servicio
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun HomeScreen(navController: NavHostController) {
-    val destinos = listOf(
-        Destino("Lugares", R.drawable.lugares, Color(0xFFE53935), "detalle"),
-        Destino("Eventos", R.drawable.eventos, Color(0xFF1E88E5), "detalle"),
-        Destino("Gastronomía", R.drawable.gastronomia, Color(0xFFFDD835), "detalle"),
-        Destino("Transporte", R.drawable.transporte, Color(0xFF43A047), "detalle")
-    )
-
+fun HomeScreen(navController: NavHostController, homeViewModel: HomeViewModel = viewModel()) {
     Scaffold(
         topBar = {
             TopAppBar(
@@ -49,13 +54,13 @@ fun HomeScreen(navController: NavHostController) {
                 NavigationBarItem(
                     selected = true,
                     onClick = {},
-                    icon = { Icon(painterResource(id = R.drawable.ic_home), contentDescription = null) },
+                    icon = { Icon(imageVector = Icons.Default.Home, contentDescription = null) },
                     label = { Text("Inicio") }
                 )
                 NavigationBarItem(
                     selected = false,
                     onClick = { navController.navigate("perfil") },
-                    icon = { Icon(painterResource(id = R.drawable.ic_favorite), contentDescription = null) },
+                    icon = { Icon(imageVector = Icons.Default.Favorite, contentDescription = null) },
                     label = { Text("Favoritos") }
                 )
             }
@@ -74,40 +79,54 @@ fun HomeScreen(navController: NavHostController) {
                 verticalArrangement = Arrangement.spacedBy(12.dp),
                 horizontalArrangement = Arrangement.spacedBy(12.dp)
             ) {
-                items(destinos) { destino ->
-                    Card(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .aspectRatio(1f)
-                            .clickable { navController.navigate(destino.route) },
-                        colors = CardDefaults.cardColors(containerColor = destino.color),
-                        shape = RoundedCornerShape(16.dp)
-                    ) {
-                        Box(
-                            modifier = Modifier.fillMaxSize(),
-                            contentAlignment = Alignment.Center
-                        ) {
-                            Image(
-                                painter = painterResource(id = destino.imageRes),
-                                contentDescription = destino.nombre,
-                                contentScale = ContentScale.Crop,
-                                modifier = Modifier
-                                    .fillMaxSize()
-                                    .clip(RoundedCornerShape(16.dp))
-                                    .background(destino.color.copy(alpha = 0.2f))
-                            )
-                            Text(
-                                text = destino.nombre,
-                                color = Color.White,
-                                style = MaterialTheme.typography.titleMedium,
-                                fontWeight = FontWeight.Bold
-                            )
-                        }
-                    }
+                items(homeViewModel.lugares) { lugar ->
+                    CategoryCard(lugar, navController)
+                }
+                items(homeViewModel.eventos) { evento ->
+                    CategoryCard(evento, navController)
+                }
+                items(homeViewModel.servicios) { servicio ->
+                    CategoryCard(servicio, navController)
                 }
             }
         }
     }
 }
 
+@Composable
+fun CategoryCard(item: Any, navController: NavHostController) {
+    val (id, nombre, imageRes) = when (item) {
+        is Lugar -> Triple(item.id, item.nombre, item.imageRes)
+        is Evento -> Triple(item.id, item.nombre, item.imageRes)
+        is Servicio -> Triple(item.id, item.nombre, item.imageRes)
+        else -> throw IllegalArgumentException("Unknown item type")
+    }
 
+    Card(
+        modifier = Modifier
+            .fillMaxWidth()
+            .aspectRatio(1f)
+            .clickable { navController.navigate("detalle/$id") },
+        shape = RoundedCornerShape(16.dp)
+    ) {
+        Box(
+            modifier = Modifier.fillMaxSize(),
+            contentAlignment = Alignment.Center
+        ) {
+            Image(
+                painter = painterResource(id = imageRes),
+                contentDescription = nombre,
+                contentScale = ContentScale.Crop,
+                modifier = Modifier
+                    .fillMaxSize()
+                    .clip(RoundedCornerShape(16.dp))
+            )
+            Text(
+                text = nombre,
+                color = Color.White,
+                style = MaterialTheme.typography.titleMedium,
+                fontWeight = FontWeight.Bold
+            )
+        }
+    }
+}
