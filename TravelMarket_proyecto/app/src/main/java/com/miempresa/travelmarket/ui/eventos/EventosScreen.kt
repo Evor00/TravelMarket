@@ -5,13 +5,15 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.itemsIndexed
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.*
 import androidx.compose.material3.*
-import androidx.compose.runtime.Composable
+import androidx.compose.runtime.*
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -33,7 +35,18 @@ import com.miempresa.travelmarket.ui.theme.UnselectedItemColor
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun EventosScreen(navController: NavHostController) {
-    val eventos = getEventos()
+    var searchQuery by remember { mutableStateOf("") }
+    val eventos = remember { getEventos() }
+
+    val filteredEventos = if (searchQuery.isEmpty()) {
+        eventos
+    } else {
+        eventos.filter {
+            it.nombre.contains(searchQuery, ignoreCase = true) ||
+                    it.descripcion.contains(searchQuery, ignoreCase = true) ||
+                    it.fecha.contains(searchQuery, ignoreCase = true)
+        }
+    }
 
     Scaffold(
         topBar = {
@@ -65,8 +78,8 @@ fun EventosScreen(navController: NavHostController) {
                 }
                 Spacer(modifier = Modifier.height(16.dp))
                 TextField(
-                    value = "",
-                    onValueChange = {},
+                    value = searchQuery,
+                    onValueChange = { searchQuery = it },
                     placeholder = { Text("Buscar eventos o zona...") },
                     leadingIcon = { Icon(Icons.Default.Search, contentDescription = null) },
                     modifier = Modifier.fillMaxWidth(),
@@ -119,14 +132,17 @@ fun EventosScreen(navController: NavHostController) {
         ) {
             item {
                 Text(
-                    text = "Eventos Destacados",
+                    text = if (searchQuery.isEmpty()) "Eventos Destacados" else "Resultados de la búsqueda",
                     style = MaterialTheme.typography.titleMedium,
                     fontWeight = FontWeight.Bold,
                     modifier = Modifier.padding(bottom = 8.dp)
                 )
             }
-            itemsIndexed(eventos) { index, evento ->
-                EventoCard(evento = evento, index = index, navController = navController)
+            items(filteredEventos, key = { it.nombre }) { evento ->
+                val originalIndex = eventos.indexOf(evento)
+                if (originalIndex != -1) {
+                    EventoCard(evento = evento, index = originalIndex, navController = navController)
+                }
             }
         }
     }

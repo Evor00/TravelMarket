@@ -5,13 +5,15 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.itemsIndexed
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.*
 import androidx.compose.material3.*
-import androidx.compose.runtime.Composable
+import androidx.compose.runtime.*
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -31,7 +33,18 @@ import com.miempresa.travelmarket.ui.theme.*
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun GastronomiaScreen(navController: NavHostController) {
-    val restaurantes = getGastronomia()
+    var searchQuery by remember { mutableStateOf("") }
+    val restaurantes = remember { getGastronomia() }
+
+    val filteredRestaurantes = if (searchQuery.isEmpty()) {
+        restaurantes
+    } else {
+        restaurantes.filter {
+            it.nombre.contains(searchQuery, ignoreCase = true) ||
+                    it.tipo.contains(searchQuery, ignoreCase = true) ||
+                    it.descripcionCorta.contains(searchQuery, ignoreCase = true)
+        }
+    }
 
     Scaffold(
         topBar = {
@@ -68,8 +81,8 @@ fun GastronomiaScreen(navController: NavHostController) {
                 }
                 Spacer(modifier = Modifier.height(16.dp))
                 TextField(
-                    value = "",
-                    onValueChange = {},
+                    value = searchQuery,
+                    onValueChange = { searchQuery = it },
                     placeholder = { Text("Buscar restaurantes...") },
                     leadingIcon = { Icon(Icons.Default.Search, contentDescription = null) },
                     modifier = Modifier.fillMaxWidth(),
@@ -120,8 +133,11 @@ fun GastronomiaScreen(navController: NavHostController) {
             contentPadding = PaddingValues(16.dp),
             verticalArrangement = Arrangement.spacedBy(16.dp)
         ) {
-            itemsIndexed(restaurantes) { index, restaurante ->
-                RestauranteCard(restaurante = restaurante, index = index, navController = navController)
+            items(filteredRestaurantes, key = { it.nombre }) { restaurante ->
+                val originalIndex = restaurantes.indexOf(restaurante)
+                if (originalIndex != -1) {
+                    RestauranteCard(restaurante = restaurante, index = originalIndex, navController = navController)
+                }
             }
         }
     }

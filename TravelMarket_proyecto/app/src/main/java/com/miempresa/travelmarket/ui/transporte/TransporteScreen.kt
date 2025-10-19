@@ -5,13 +5,15 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.itemsIndexed
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.*
 import androidx.compose.material3.*
-import androidx.compose.runtime.Composable
+import androidx.compose.runtime.*
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -29,26 +31,56 @@ import com.miempresa.travelmarket.ui.theme.*
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun TransporteScreen(navController: NavHostController) {
-    val transportes = getTransporte()
+    var searchQuery by remember { mutableStateOf("") }
+    val transportes = remember { getTransporte() }
+
+    val lineasPrincipales = remember { transportes.drop(1) }
+
+    val filteredLineas = if (searchQuery.isEmpty()) {
+        lineasPrincipales
+    } else {
+        lineasPrincipales.filter {
+            it.nombre.contains(searchQuery, ignoreCase = true) ||
+                    it.tipo.contains(searchQuery, ignoreCase = true) ||
+                    it.descripcionCorta.contains(searchQuery, ignoreCase = true)
+        }
+    }
 
     Scaffold(
         topBar = {
-            TopAppBar(
-                title = { Text("Transporte", color = Color.White) },
-                navigationIcon = {
+            Column(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .background(Green_gradient_end) // Tu color original de TopBar
+                    .padding(top = 24.dp, start = 16.dp, end = 16.dp, bottom = 16.dp)
+            ) {
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
                     IconButton(onClick = { navController.popBackStack() }) {
                         Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "Volver", tint = Color.White)
                     }
-                },
-                actions = {
+                    Text("Transporte", color = Color.White, style = MaterialTheme.typography.titleLarge, fontWeight = FontWeight.Bold)
+                    Spacer(modifier = Modifier.weight(1f))
                     IconButton(onClick = { /* TODO */ }) {
                         Icon(Icons.Default.NearMe, contentDescription = "Cercanos", tint = Color.White)
                     }
-                },
-                colors = TopAppBarDefaults.topAppBarColors(
-                    containerColor = Green_gradient_end
+                }
+                Spacer(modifier = Modifier.height(16.dp))
+                TextField(
+                    value = searchQuery,
+                    onValueChange = { searchQuery = it },
+                    placeholder = { Text("Buscar líneas...") },
+                    leadingIcon = { Icon(Icons.Default.Search, contentDescription = null) },
+                    modifier = Modifier.fillMaxWidth(),
+                    shape = RoundedCornerShape(8.dp),
+                    colors = TextFieldDefaults.colors(
+                        focusedIndicatorColor = Color.Transparent,
+                        unfocusedIndicatorColor = Color.Transparent
+                    )
                 )
-            )
+            }
         },
         bottomBar = {
             NavigationBar(containerColor = Color.White) {
@@ -100,8 +132,11 @@ fun TransporteScreen(navController: NavHostController) {
                 SectionHeader(icon = Icons.Default.DirectionsBus, title = "Líneas Principales")
             }
 
-            itemsIndexed(transportes.drop(1)) { index, transporte ->
-                LineaCard(transporte = transporte, index = index + 1, navController = navController)
+            items(filteredLineas, key = { it.nombre }) { transporte ->
+                val originalIndex = transportes.indexOf(transporte)
+                if (originalIndex != -1) {
+                    LineaCard(transporte = transporte, index = originalIndex, navController = navController)
+                }
             }
         }
     }
