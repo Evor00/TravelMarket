@@ -45,7 +45,7 @@ android {
 
 dependencies {
     // Dependencias básicas de Android y Compose
-    implementation("androidx.compose.material:material-icons-extended:1.4.3")
+    implementation(libs.androidx.compose.material.icons.extended)
 
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
@@ -57,7 +57,7 @@ dependencies {
     implementation(libs.androidx.compose.material3)
 
     // Navegación con Jetpack Compose (requisito RF08)
-    implementation("androidx.navigation:navigation-compose:2.8.0")
+    implementation(libs.androidx.navigation.compose)
 
     // Test
     testImplementation(libs.junit)
