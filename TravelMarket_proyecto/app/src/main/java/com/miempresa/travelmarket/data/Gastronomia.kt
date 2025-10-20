@@ -19,7 +19,7 @@ fun getGastronomia(): List<Restaurante> {
             "Tradición y sabor arequipeño.",
             "Una de las picanterías más emblemáticas de Arequipa, famosa por su adobo, rocoto relleno y chicha de jora.",
             "1.5 km",
-            R.drawable.gastronomia
+            R.drawable.lanuevapalomino
         ),
         Restaurante(
             "Sol de Mayo",
@@ -27,7 +27,7 @@ fun getGastronomia(): List<Restaurante> {
             "Comida arequipeña con música en vivo.",
             "Ofrece una experiencia completa con platos típicos, un amplio patio colonial y espectáculos de música arequipeña.",
             "2.0 km",
-            R.drawable.gastronomia
+            R.drawable.soldemayo
         ),
         Restaurante(
             "Zig Zag",
@@ -35,7 +35,7 @@ fun getGastronomia(): List<Restaurante> {
             "Carnes a la piedra volcánica.",
             "Cocina alpaca y trucha en piedras volcánicas calientes. Una fusión de sabores andinos y técnica europea.",
             "1.2 km",
-            R.drawable.gastronomia
+            R.drawable.zigzag
         ),
         Restaurante(
             "Chicha por Gastón Acurio",
@@ -43,7 +43,7 @@ fun getGastronomia(): List<Restaurante> {
             "Alta cocina regional.",
             "La propuesta de Gastón Acurio que reinterpreta los platos clásicos de la cocina arequipeña con un toque moderno y sofisticado.",
             "1.0 km",
-            R.drawable.gastronomia
+            R.drawable.chica
         )
     )
 }

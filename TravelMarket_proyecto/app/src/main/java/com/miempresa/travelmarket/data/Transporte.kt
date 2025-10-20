@@ -23,7 +23,7 @@ fun getTransporte(): List<Transporte> {
             ubicacion = "Varias estaciones en la ciudad",
             ruta = "Rutas troncales y alimentadoras",
             distancia = "Varía",
-            imageRes = R.drawable.transporte
+            imageRes = R.drawable.bus
         ),
         Transporte(
             nombre = "Taxis de la Ciudad",
@@ -33,7 +33,7 @@ fun getTransporte(): List<Transporte> {
             ubicacion = "Toda la ciudad",
             ruta = "A solicitud del pasajero",
             distancia = "Varía",
-            imageRes = R.drawable.transporte
+            imageRes = R.drawable.taxis
         ),
         Transporte(
             nombre = "Combies y Colectivos",
@@ -43,7 +43,7 @@ fun getTransporte(): List<Transporte> {
             ubicacion = "Rutas específicas por toda la ciudad",
             ruta = "Rutas fijas",
             distancia = "Varía",
-            imageRes = R.drawable.transporte
+            imageRes = R.drawable.combi
         )
     )
 }

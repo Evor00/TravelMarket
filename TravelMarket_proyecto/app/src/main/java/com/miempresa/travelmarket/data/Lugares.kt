@@ -17,28 +17,28 @@ fun getLugares(): List<Lugar> {
             "El corazón de la ciudad blanca",
             "La Plaza de Armas es el corazón de Arequipa, rodeada de portales de granito y la imponente Catedral. Un lugar perfecto para empezar a explorar la ciudad.",
             "1.2 km de tu ubicación",
-            R.drawable.lugares
+            R.drawable.plazadearmas
         ),
         Lugar(
             "Monasterio de Santa Catalina",
             "Una ciudad dentro de una ciudad",
             "Este convento es una joya arquitectónica con calles de colores vibrantes, patios y claustros. Un viaje en el tiempo a la época colonial.",
             "1.5 km de tu ubicación",
-            R.drawable.lugares
+            R.drawable.catalina
         ),
         Lugar(
             "Mirador de Yanahuara",
             "Vistas panorámicas del Misti",
             "Ofrece vistas espectaculares de la ciudad y los volcanes Misti, Chachani y Pichu Pichu. Sus arcos de sillar son icónicos.",
             "2.8 km de tu ubicación",
-            R.drawable.lugares
+            R.drawable.mirador
         ),
         Lugar(
             "Cañón del Colca",
             "Uno de los cañones más profundos",
             "A unas horas de Arequipa, es ideal para el trekking y el avistamiento del cóndor andino. Un paisaje natural impresionante.",
             "160 km de tu ubicación",
-            R.drawable.lugares
+            R.drawable.colca
         )
     )
 }
