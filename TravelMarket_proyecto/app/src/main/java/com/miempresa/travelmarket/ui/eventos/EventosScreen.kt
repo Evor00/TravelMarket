@@ -16,7 +16,6 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
@@ -25,8 +24,8 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
-import com.miempresa.travelmarket.data.Evento
-import com.miempresa.travelmarket.data.getEventos
+import com.miempresa.travelmarket.data.Repository
+import com.miempresa.travelmarket.models.Evento
 import com.miempresa.travelmarket.ui.theme.GradientEnd
 import com.miempresa.travelmarket.ui.theme.GradientStart
 import com.miempresa.travelmarket.ui.theme.SelectedItemColor
@@ -36,15 +35,14 @@ import com.miempresa.travelmarket.ui.theme.UnselectedItemColor
 @Composable
 fun EventosScreen(navController: NavHostController) {
     var searchQuery by remember { mutableStateOf("") }
-    val eventos = remember { getEventos() }
+    val eventos by remember { mutableStateOf(Repository.eventos) }
 
     val filteredEventos = if (searchQuery.isEmpty()) {
         eventos
     } else {
         eventos.filter {
             it.nombre.contains(searchQuery, ignoreCase = true) ||
-                    it.descripcion.contains(searchQuery, ignoreCase = true) ||
-                    it.fecha.contains(searchQuery, ignoreCase = true)
+                    it.descripcion.contains(searchQuery, ignoreCase = true)
         }
     }
 
@@ -138,22 +136,19 @@ fun EventosScreen(navController: NavHostController) {
                     modifier = Modifier.padding(bottom = 8.dp)
                 )
             }
-            items(filteredEventos, key = { it.nombre }) { evento ->
-                val originalIndex = eventos.indexOf(evento)
-                if (originalIndex != -1) {
-                    EventoCard(evento = evento, index = originalIndex, navController = navController)
-                }
+            items(filteredEventos, key = { it.id }) { evento ->
+                EventoCard(evento = evento, navController = navController)
             }
         }
     }
 }
 
 @Composable
-fun EventoCard(evento: Evento, index: Int, navController: NavHostController) {
+fun EventoCard(evento: Evento, navController: NavHostController) {
     Card(
         modifier = Modifier
             .fillMaxWidth()
-            .clickable { navController.navigate("detalleEvento/$index") },
+            .clickable { navController.navigate("detalle/${evento.id}") },
         shape = RoundedCornerShape(16.dp),
         colors = CardDefaults.cardColors(containerColor = Color.White),
         elevation = CardDefaults.cardElevation(defaultElevation = 2.dp)
@@ -165,29 +160,13 @@ fun EventoCard(evento: Evento, index: Int, navController: NavHostController) {
                     .height(180.dp),
                 contentAlignment = Alignment.TopEnd
             ) {
-                if (evento.imageRes != null) {
-                    Image(
-                        painter = painterResource(id = evento.imageRes),
-                        contentDescription = evento.nombre,
-                        contentScale = ContentScale.Crop,
-                        modifier = Modifier
-                            .fillMaxSize()
-                    )
-                } else {
-                    Box(
-                        modifier = Modifier
-                            .fillMaxSize()
-                            .background(Color.LightGray.copy(alpha = 0.5f)),
-                        contentAlignment = Alignment.Center
-                    ) {
-                        Icon(
-                            imageVector = Icons.Default.Image,
-                            contentDescription = "Imagen no disponible",
-                            tint = Color.Gray,
-                            modifier = Modifier.size(60.dp)
-                        )
-                    }
-                }
+                Image(
+                    painter = painterResource(id = evento.imageRes),
+                    contentDescription = evento.nombre,
+                    contentScale = ContentScale.Crop,
+                    modifier = Modifier
+                        .fillMaxSize()
+                )
                 Surface(
                     modifier = Modifier.padding(12.dp),
                     shape = RoundedCornerShape(20.dp),
@@ -206,31 +185,6 @@ fun EventoCard(evento: Evento, index: Int, navController: NavHostController) {
                 Text(evento.nombre, fontWeight = FontWeight.Bold, fontSize = 18.sp)
                 Text(evento.descripcion, fontSize = 14.sp, color = Color.Gray, maxLines = 1)
                 Spacer(modifier = Modifier.height(8.dp))
-                Row(
-                    horizontalArrangement = Arrangement.spacedBy(24.dp),
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
-                    Row(verticalAlignment = Alignment.CenterVertically) {
-                        Icon(
-                            Icons.Default.Schedule,
-                            contentDescription = "Hora",
-                            tint = MaterialTheme.colorScheme.primary,
-                            modifier = Modifier.size(18.dp)
-                        )
-                        Spacer(modifier = Modifier.width(4.dp))
-                        Text(evento.hora, fontSize = 14.sp, color = MaterialTheme.colorScheme.primary)
-                    }
-                    Row(verticalAlignment = Alignment.CenterVertically) {
-                        Icon(
-                            Icons.Default.LocationOn,
-                            contentDescription = "Distancia",
-                            tint = MaterialTheme.colorScheme.primary,
-                            modifier = Modifier.size(18.dp)
-                        )
-                        Spacer(modifier = Modifier.width(4.dp))
-                        Text(evento.distancia, fontSize = 14.sp, color = MaterialTheme.colorScheme.primary)
-                    }
-                }
             }
         }
     }

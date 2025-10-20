@@ -1,7 +1,5 @@
 package com.miempresa.travelmarket.data
 
-import com.miempresa.travelmarket.R
-
 data class Evento(
     val nombre: String,
     val descripcion: String,val fecha: String,

@@ -13,32 +13,32 @@ data class Lugar(
 fun getLugares(): List<Lugar> {
     return listOf(
         Lugar(
-            "Playa Miraflores",
-            "Playa urbana con vista al océano",
-            "Hermosa playa urbana con vista al océano Pacífico. Ideal para disfrutar del atardecer y practicar surf.",
-            "2.3 km de tu ubicación",
-            null
+            "Plaza de Armas de Arequipa",
+            "El corazón de la ciudad blanca",
+            "La Plaza de Armas es el corazón de Arequipa, rodeada de portales de granito y la imponente Catedral. Un lugar perfecto para empezar a explorar la ciudad.",
+            "1.2 km de tu ubicación",
+            R.drawable.lugares
         ),
         Lugar(
-            "Centro Histórico de Lima",
-            "Patrimonio UNESCO con arquitectura colonial",
-            "Patrimonio de la Humanidad por la UNESCO, con impresionante arquitectura colonial y balcones.",
-            "5.8 km de tu ubicación",
-            null
+            "Monasterio de Santa Catalina",
+            "Una ciudad dentro de una ciudad",
+            "Este convento es una joya arquitectónica con calles de colores vibrantes, patios y claustros. Un viaje en el tiempo a la época colonial.",
+            "1.5 km de tu ubicación",
+            R.drawable.lugares
         ),
         Lugar(
-            "Museo de Arte de Lima",
-            "3000 años de arte peruano",
-            "Explora 3000 años de arte peruano, desde la época precolombina hasta la actualidad.",
-            "3.5 km de tu ubicación",
-            null
+            "Mirador de Yanahuara",
+            "Vistas panorámicas del Misti",
+            "Ofrece vistas espectaculares de la ciudad y los volcanes Misti, Chachani y Pichu Pichu. Sus arcos de sillar son icónicos.",
+            "2.8 km de tu ubicación",
+            R.drawable.lugares
         ),
         Lugar(
-            "Parque de las Aguas",
-            "Circuito de fuentes interactivas",
-            "Famoso por su Circuito Mágico del Agua, un espectáculo nocturno de luces y sonido.",
-            "4.2 km de tu ubicación",
-            null
+            "Cañón del Colca",
+            "Uno de los cañones más profundos",
+            "A unas horas de Arequipa, es ideal para el trekking y el avistamiento del cóndor andino. Un paisaje natural impresionante.",
+            "160 km de tu ubicación",
+            R.drawable.lugares
         )
     )
 }

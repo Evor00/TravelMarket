@@ -25,9 +25,8 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
-import com.miempresa.travelmarket.R
-import com.miempresa.travelmarket.data.Lugar
-import com.miempresa.travelmarket.data.getLugares
+import com.miempresa.travelmarket.models.Lugar
+import com.miempresa.travelmarket.data.Repository
 import com.miempresa.travelmarket.ui.theme.GradientEnd
 import com.miempresa.travelmarket.ui.theme.GradientStart
 import com.miempresa.travelmarket.ui.theme.SelectedItemColor
@@ -37,7 +36,7 @@ import com.miempresa.travelmarket.ui.theme.UnselectedItemColor
 @Composable
 fun LugaresScreen(navController: NavHostController) {
     var searchQuery by remember { mutableStateOf("") }
-    val lugares = remember { getLugares() }
+    val lugares by remember { mutableStateOf(Repository.lugares) }
 
     val filteredLugares = if (searchQuery.isEmpty()) {
         lugares
@@ -136,19 +135,18 @@ fun LugaresScreen(navController: NavHostController) {
             verticalArrangement = Arrangement.spacedBy(16.dp)
         ) {
             items(filteredLugares) { lugar ->
-                val originalIndex = lugares.indexOf(lugar)
-                LugarCard(lugar = lugar, index = originalIndex, navController = navController)
+                LugarCard(lugar = lugar, navController = navController)
             }
         }
     }
 }
 
 @Composable
-fun LugarCard(lugar: Lugar, index: Int, navController: NavHostController) {
+fun LugarCard(lugar: Lugar, navController: NavHostController) {
     Card(
         modifier = Modifier
             .fillMaxWidth()
-            .clickable { navController.navigate("detalleLugar/$index") },
+            .clickable { navController.navigate("detalle/${lugar.id}") },
         shape = RoundedCornerShape(16.dp),
         colors = CardDefaults.cardColors(containerColor = Color.White),
         elevation = CardDefaults.cardElevation(defaultElevation = 2.dp)
@@ -157,48 +155,20 @@ fun LugarCard(lugar: Lugar, index: Int, navController: NavHostController) {
             modifier = Modifier.padding(12.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
-            if (lugar.imageRes != null) {
-                Image(
-                    painter = painterResource(id = lugar.imageRes),
-                    contentDescription = lugar.nombre,
-                    contentScale = ContentScale.Crop,
-                    modifier = Modifier
-                        .size(80.dp)
-                        .clip(RoundedCornerShape(12.dp))
-                )
-            } else {
-                Box(
-                    modifier = Modifier
-                        .size(80.dp)
-                        .clip(RoundedCornerShape(12.dp))
-                        .background(Color.LightGray.copy(alpha = 0.5f)),
-                    contentAlignment = Alignment.Center
-                ) {
-                    Icon(
-                        imageVector = Icons.Default.Image,
-                        contentDescription = "Imagen no disponible",
-                        tint = Color.Gray,
-                        modifier = Modifier.size(40.dp)
-                    )
-                }
-            }
+            Image(
+                painter = painterResource(id = lugar.imageRes),
+                contentDescription = lugar.nombre,
+                contentScale = ContentScale.Crop,
+                modifier = Modifier
+                    .size(80.dp)
+                    .clip(RoundedCornerShape(12.dp))
+            )
             Spacer(modifier = Modifier.width(16.dp))
             Column(modifier = Modifier.weight(1f)) {
                 Text(lugar.nombre, fontWeight = FontWeight.Bold, fontSize = 16.sp)
                 Text(lugar.descripcion, fontSize = 14.sp, color = Color.Gray, maxLines = 1)
                 Spacer(modifier = Modifier.height(4.dp))
-                Row(verticalAlignment = Alignment.CenterVertically) {
-                    Icon(
-                        Icons.Default.LocationOn,
-                        contentDescription = "Distancia",
-                        tint = MaterialTheme.colorScheme.primary,
-                        modifier = Modifier.size(16.dp)
-                    )
-                    Spacer(modifier = Modifier.width(4.dp))
-                    Text(lugar.distancia, fontSize = 12.sp, color = MaterialTheme.colorScheme.primary)
-                }
             }
         }
     }
 }
-

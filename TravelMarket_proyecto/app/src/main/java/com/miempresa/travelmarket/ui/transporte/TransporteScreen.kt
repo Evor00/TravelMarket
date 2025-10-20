@@ -1,6 +1,5 @@
 package com.miempresa.travelmarket.ui.transporte
 
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
@@ -12,37 +11,29 @@ import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
-import com.miempresa.travelmarket.data.Transporte
-import com.miempresa.travelmarket.data.getTransporte
+import com.miempresa.travelmarket.data.Repository
+import com.miempresa.travelmarket.models.Transporte
 import com.miempresa.travelmarket.ui.theme.*
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun TransporteScreen(navController: NavHostController) {
     var searchQuery by remember { mutableStateOf("") }
-    val transportes = remember { getTransporte() }
+    val transportes by remember { mutableStateOf(Repository.transporte) }
 
-    val lineasPrincipales = remember { transportes.drop(1) }
-
-    val filteredLineas = if (searchQuery.isEmpty()) {
-        lineasPrincipales
+    val filteredTransportes = if (searchQuery.isEmpty()) {
+        transportes
     } else {
-        lineasPrincipales.filter {
+        transportes.filter {
             it.nombre.contains(searchQuery, ignoreCase = true) ||
-                    it.tipo.contains(searchQuery, ignoreCase = true) ||
-                    it.descripcionCorta.contains(searchQuery, ignoreCase = true)
+                    it.descripcion.contains(searchQuery, ignoreCase = true)
         }
     }
 
@@ -77,7 +68,10 @@ fun TransporteScreen(navController: NavHostController) {
                     shape = RoundedCornerShape(8.dp),
                     colors = TextFieldDefaults.colors(
                         focusedIndicatorColor = Color.Transparent,
-                        unfocusedIndicatorColor = Color.Transparent
+                        unfocusedIndicatorColor = Color.Transparent,
+                        unfocusedContainerColor = Color.White,
+                        focusedContainerColor = Color.White,
+                        disabledContainerColor = Color.White
                     )
                 )
             }
@@ -121,64 +115,19 @@ fun TransporteScreen(navController: NavHostController) {
             contentPadding = PaddingValues(16.dp),
             verticalArrangement = Arrangement.spacedBy(12.dp)
         ) {
-            item {
-                SectionHeader(icon = Icons.Default.LocationOn, title = "Paraderos Cercanos")
-                Spacer(modifier = Modifier.height(8.dp))
-                ParaderoCard(transporte = transportes[0], index = 0, navController = navController)
-            }
-
-            item {
-                Spacer(modifier = Modifier.height(16.dp))
-                SectionHeader(icon = Icons.Default.DirectionsBus, title = "Líneas Principales")
-            }
-
-            items(filteredLineas, key = { it.nombre }) { transporte ->
-                val originalIndex = transportes.indexOf(transporte)
-                if (originalIndex != -1) {
-                    LineaCard(transporte = transporte, index = originalIndex, navController = navController)
-                }
+            items(filteredTransportes) { transporte ->
+                TransporteCard(transporte = transporte, navController = navController)
             }
         }
     }
 }
 
 @Composable
-fun SectionHeader(icon: androidx.compose.ui.graphics.vector.ImageVector, title: String) {
-    Row(verticalAlignment = Alignment.CenterVertically) {
-        Icon(imageVector = icon, contentDescription = null, tint = MaterialTheme.colorScheme.primary)
-        Spacer(modifier = Modifier.width(8.dp))
-        Text(text = title, fontWeight = FontWeight.Bold, style = MaterialTheme.typography.titleMedium)
-    }
-}
-
-@Composable
-fun ParaderoCard(transporte: Transporte, index: Int, navController: NavHostController) {
+fun TransporteCard(transporte: Transporte, navController: NavHostController) {
     Card(
         modifier = Modifier
             .fillMaxWidth()
-            .clickable { navController.navigate("detalleTransporte/$index") },
-        shape = RoundedCornerShape(16.dp),
-        colors = CardDefaults.cardColors(containerColor = Color.White)
-    ) {
-        Column(modifier = Modifier.padding(16.dp)) {
-            Text(transporte.nombre, fontWeight = FontWeight.Bold, fontSize = 16.sp)
-            Text(transporte.descripcionCorta, fontSize = 14.sp, color = Color.Gray)
-            Spacer(modifier = Modifier.height(8.dp))
-            Row(verticalAlignment = Alignment.CenterVertically) {
-                Icon(Icons.Default.LocationOn, contentDescription = "Distancia", tint = Color(0xFF00C853), modifier = Modifier.size(16.dp))
-                Spacer(modifier = Modifier.width(4.dp))
-                Text(transporte.distancia, fontSize = 14.sp, color = Color(0xFF00C853), fontWeight = FontWeight.Bold)
-            }
-        }
-    }
-}
-
-@Composable
-fun LineaCard(transporte: Transporte, index: Int, navController: NavHostController) {
-    Card(
-        modifier = Modifier
-            .fillMaxWidth()
-            .clickable { navController.navigate("detalleTransporte/$index") },
+            .clickable { navController.navigate("detalle/${transporte.id}") },
         shape = RoundedCornerShape(16.dp),
         colors = CardDefaults.cardColors(containerColor = Color.White)
     ) {
@@ -189,33 +138,18 @@ fun LineaCard(transporte: Transporte, index: Int, navController: NavHostControll
             Box(
                 modifier = Modifier
                     .size(64.dp)
-                    .clip(RoundedCornerShape(12.dp)),
+                    .background(
+                        Blue_card.copy(alpha = 0.1f),
+                        shape = RoundedCornerShape(12.dp)
+                    ),
                 contentAlignment = Alignment.Center
             ) {
-                if (transporte.imageRes != null) {
-                    Image(
-                        painter = painterResource(id = transporte.imageRes),
-                        contentDescription = transporte.nombre,
-                        contentScale = ContentScale.Crop,
-                        modifier = Modifier
-                            .fillMaxSize()
-                            .background(Blue_card.copy(alpha = 0.1f))
-                    )
-                } else {
-                    Box(
-                        modifier = Modifier
-                            .fillMaxSize()
-                            .background(Blue_card.copy(alpha = 0.1f)),
-                        contentAlignment = Alignment.Center
-                    ) {
-                        Icon(
-                            imageVector = Icons.Default.Image,
-                            contentDescription = "Imagen no disponible",
-                            tint = MaterialTheme.colorScheme.primary.copy(alpha = 0.6f),
-                            modifier = Modifier.size(32.dp)
-                        )
-                    }
-                }
+                Icon(
+                    imageVector = Icons.Default.DirectionsBus,
+                    contentDescription = "Transporte",
+                    tint = MaterialTheme.colorScheme.primary,
+                    modifier = Modifier.size(40.dp)
+                )
             }
             Spacer(modifier = Modifier.width(16.dp))
             Column(modifier = Modifier.weight(1f)) {
@@ -233,15 +167,7 @@ fun LineaCard(transporte: Transporte, index: Int, navController: NavHostControll
                         modifier = Modifier.padding(horizontal = 8.dp, vertical = 2.dp)
                     )
                 }
-                Text(transporte.descripcionCorta, fontSize = 14.sp, color = Color.Gray)
-            }
-            Column(horizontalAlignment = Alignment.End) {
-                Spacer(modifier = Modifier.height(32.dp))
-                Row(verticalAlignment = Alignment.CenterVertically) {
-                    Icon(Icons.Default.LocationOn, contentDescription = null, tint = Color(0xFF00C853), modifier = Modifier.size(14.dp))
-                    Spacer(modifier = Modifier.width(4.dp))
-                    Text(transporte.distancia, fontSize = 12.sp, color = Color(0xFF00C853), fontWeight = FontWeight.Bold)
-                }
+                Text(transporte.descripcion, fontSize = 14.sp, color = Color.Gray)
             }
         }
     }

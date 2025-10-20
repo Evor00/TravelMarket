@@ -1,6 +1,5 @@
 package com.miempresa.travelmarket.ui.gastronomia
 
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
@@ -12,37 +11,31 @@ import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
-import com.miempresa.travelmarket.R
-import com.miempresa.travelmarket.data.Restaurante
-import com.miempresa.travelmarket.data.getGastronomia
+import com.miempresa.travelmarket.data.Repository
+import com.miempresa.travelmarket.models.Gastronomia
 import com.miempresa.travelmarket.ui.theme.*
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun GastronomiaScreen(navController: NavHostController) {
     var searchQuery by remember { mutableStateOf("") }
-    val restaurantes = remember { getGastronomia() }
+    val gastronomia by remember { mutableStateOf(Repository.gastronomia) }
 
-    val filteredRestaurantes = if (searchQuery.isEmpty()) {
-        restaurantes
+    val filteredGastronomia = if (searchQuery.isEmpty()) {
+        gastronomia
     } else {
-        restaurantes.filter {
+        gastronomia.filter {
             it.nombre.contains(searchQuery, ignoreCase = true) ||
-                    it.tipo.contains(searchQuery, ignoreCase = true) ||
-                    it.descripcionCorta.contains(searchQuery, ignoreCase = true)
+                    it.descripcion.contains(searchQuery, ignoreCase = true)
         }
     }
 
@@ -89,7 +82,10 @@ fun GastronomiaScreen(navController: NavHostController) {
                     shape = RoundedCornerShape(8.dp),
                     colors = TextFieldDefaults.colors(
                         focusedIndicatorColor = Color.Transparent,
-                        unfocusedIndicatorColor = Color.Transparent
+                        unfocusedIndicatorColor = Color.Transparent,
+                        unfocusedContainerColor = Color.White,
+                        focusedContainerColor = Color.White,
+                        disabledContainerColor = Color.White
                     )
                 )
             }
@@ -133,22 +129,19 @@ fun GastronomiaScreen(navController: NavHostController) {
             contentPadding = PaddingValues(16.dp),
             verticalArrangement = Arrangement.spacedBy(16.dp)
         ) {
-            items(filteredRestaurantes, key = { it.nombre }) { restaurante ->
-                val originalIndex = restaurantes.indexOf(restaurante)
-                if (originalIndex != -1) {
-                    RestauranteCard(restaurante = restaurante, index = originalIndex, navController = navController)
-                }
+            items(filteredGastronomia) { gastronomiaItem ->
+                GastronomiaCard(gastronomiaItem = gastronomiaItem, navController = navController)
             }
         }
     }
 }
 
 @Composable
-fun RestauranteCard(restaurante: Restaurante, index: Int, navController: NavHostController) {
+fun GastronomiaCard(gastronomiaItem: Gastronomia, navController: NavHostController) {
     Card(
         modifier = Modifier
             .fillMaxWidth()
-            .clickable { navController.navigate("detalleGastro/$index") },
+            .clickable { navController.navigate("detalle/${gastronomiaItem.id}") },
         shape = RoundedCornerShape(16.dp),
         colors = CardDefaults.cardColors(containerColor = Color.White),
         elevation = CardDefaults.cardElevation(defaultElevation = 2.dp)
@@ -157,59 +150,37 @@ fun RestauranteCard(restaurante: Restaurante, index: Int, navController: NavHost
             modifier = Modifier.padding(12.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
-            if (restaurante.imageRes != null) {
-                Image(
-                    painter = painterResource(id = restaurante.imageRes),
-                    contentDescription = restaurante.nombre,
-                    contentScale = ContentScale.Crop,
-                    modifier = Modifier
-                        .size(80.dp)
-                        .clip(RoundedCornerShape(12.dp))
+            Box(
+                modifier = Modifier
+                    .size(64.dp)
+                    .clip(RoundedCornerShape(12.dp))
+                    .background(Yellow_card.copy(alpha = 0.1f)),
+                contentAlignment = Alignment.Center
+            ) {
+                Icon(
+                    imageVector = Icons.Default.Restaurant,
+                    contentDescription = "Gastronomia",
+                    tint = Color(0xFFC08D00),
+                    modifier = Modifier.size(40.dp)
                 )
-            } else {
-                Box(
-                    modifier = Modifier
-                        .size(80.dp)
-                        .clip(RoundedCornerShape(12.dp))
-                        .background(Color.LightGray.copy(alpha = 0.5f)),
-                    contentAlignment = Alignment.Center
-                ) {
-                    Icon(
-                        imageVector = Icons.Default.Image,
-                        contentDescription = "Imagen no disponible",
-                        tint = Color.Gray,
-                        modifier = Modifier.size(40.dp)
-                    )
-                }
             }
             Spacer(modifier = Modifier.width(16.dp))
             Column(modifier = Modifier.weight(1f)) {
-                Text(restaurante.nombre, fontWeight = FontWeight.Bold, fontSize = 16.sp)
+                Text(gastronomiaItem.nombre, fontWeight = FontWeight.Bold, fontSize = 16.sp)
                 Surface(
                     shape = RoundedCornerShape(8.dp),
                     color = Yellow_card.copy(alpha = 0.2f),
                     modifier = Modifier.padding(vertical = 4.dp)
                 ) {
                     Text(
-                        text = restaurante.tipo,
+                        text = gastronomiaItem.tipo,
                         color = Color(0xFFC08D00),
                         fontSize = 11.sp,
                         fontWeight = FontWeight.Bold,
                         modifier = Modifier.padding(horizontal = 8.dp, vertical = 2.dp)
                     )
                 }
-                Text(restaurante.descripcionCorta, fontSize = 14.sp, color = Color.Gray, maxLines = 1)
-                Spacer(modifier = Modifier.height(4.dp))
-                Row(verticalAlignment = Alignment.CenterVertically) {
-                    Icon(
-                        Icons.Default.LocationOn,
-                        contentDescription = "Distancia",
-                        tint = MaterialTheme.colorScheme.primary,
-                        modifier = Modifier.size(16.dp)
-                    )
-                    Spacer(modifier = Modifier.width(4.dp))
-                    Text(restaurante.distancia, fontSize = 12.sp, color = MaterialTheme.colorScheme.primary)
-                }
+                Text(gastronomiaItem.descripcion, fontSize = 14.sp, color = Color.Gray, maxLines = 1)
             }
         }
     }

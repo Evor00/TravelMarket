@@ -14,36 +14,36 @@ data class Restaurante(
 fun getGastronomia(): List<Restaurante> {
     return listOf(
         Restaurante(
-            "Mercado de Surquillo",
-            "Mercado tradicional",
-            "Ceviche fresco y comida...",
-            "Mercado tradicional donde podrás probar ceviche fresco, anticuchos y otros platos típicos peruanos.",
-            "1.8 km",
-            null
+            "La Nueva Palomino",
+            "Picantería",
+            "Tradición y sabor arequipeño.",
+            "Una de las picanterías más emblemáticas de Arequipa, famosa por su adobo, rocoto relleno y chicha de jora.",
+            "1.5 km",
+            R.drawable.gastronomia
         ),
         Restaurante(
-            "La Mar Cebichería",
-            "Restaurante peruano",
-            "Alta cocina marina peruana",
-            "Reconocida cebichería que ofrece una innovadora carta con los mejores productos del mar peruano.",
-            "2.1 km",
-            null
+            "Sol de Mayo",
+            "Restaurante tradicional",
+            "Comida arequipeña con música en vivo.",
+            "Ofrece una experiencia completa con platos típicos, un amplio patio colonial y espectáculos de música arequipeña.",
+            "2.0 km",
+            R.drawable.gastronomia
         ),
         Restaurante(
-            "Taquería Los Compadres",
-            "Restaurante mexicano",
-            "Tacos y comida mexicana...",
-            "Auténtica taquería con una gran variedad de tacos al pastor, suadero y más, en un ambiente relajado.",
-            "3.4 km",
-            null
-        ),
-        Restaurante(
-            "Osaka Fusión Nikkei",
+            "Zig Zag",
             "Restaurante fusión",
-            "Fusión japonesa-peruana",
-            "Experiencia culinaria de alto nivel que combina la precisión de la técnica japonesa con los sabores peruanos.",
-            "4.7 km",
-            null
+            "Carnes a la piedra volcánica.",
+            "Cocina alpaca y trucha en piedras volcánicas calientes. Una fusión de sabores andinos y técnica europea.",
+            "1.2 km",
+            R.drawable.gastronomia
+        ),
+        Restaurante(
+            "Chicha por Gastón Acurio",
+            "Restaurante gourmet",
+            "Alta cocina regional.",
+            "La propuesta de Gastón Acurio que reinterpreta los platos clásicos de la cocina arequipeña con un toque moderno y sofisticado.",
+            "1.0 km",
+            R.drawable.gastronomia
         )
     )
 }
