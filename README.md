@@ -108,6 +108,21 @@ Desarrollar una aplicación móvil Android donde los turistas puedan descubrir l
 ---
 [🎥 Ver demo del proyecto](https://drive.google.com/file/d/1RoRH6Mboyn79nNj7Go40HQtZuKW4n-zY/view?usp=sharing)
 
+## ⚙️ Funcionalidades Implementadas
+
+- Navegación entre pantallas principales: Home, Lugares, Gastronomía, Eventos, Transporte y Favoritos.
+- Visualización de listas con información dinámica (LazyColumn / Grid).
+- Pantalla de detalle con imagen, descripción y botón de acción.
+- Búsqueda y filtrado básico de elementos.
+- Integración de imágenes locales y remotas.
+- Diseño basado en Material Design 3, siguiendo el prototipo creado en Figma.
+- Datos simulados mediante modelos (Lugar, Evento, Gastronomía, Transporte).
+- Navegación fluida con retorno entre pantallas.
+- Estructura organizada por paquetes: `ui`, `model`, `data`, `navigation`.
+- Control de versiones colaborativo con Git y GitHub.
+
+---
+
 ## 📸 Capturas de pantalla
 
 ### Pantalla de Inicio

@@ -1,5 +1,6 @@
 package com.miempresa.travelmarket.ui.gastronomia
 
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
@@ -16,6 +17,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -23,6 +26,7 @@ import androidx.navigation.NavHostController
 import com.miempresa.travelmarket.data.Repository
 import com.miempresa.travelmarket.models.Gastronomia
 import com.miempresa.travelmarket.ui.theme.*
+import com.miempresa.travelmarket.R
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -157,11 +161,13 @@ fun GastronomiaCard(gastronomiaItem: Gastronomia, navController: NavHostControll
                     .background(Yellow_card.copy(alpha = 0.1f)),
                 contentAlignment = Alignment.Center
             ) {
-                Icon(
-                    imageVector = Icons.Default.Restaurant,
-                    contentDescription = "Gastronomia",
-                    tint = Color(0xFFC08D00),
-                    modifier = Modifier.size(40.dp)
+                Image(
+                    painter = painterResource(id = gastronomiaItem.imageRes),
+                    contentDescription = gastronomiaItem.nombre,
+                    contentScale = ContentScale.Crop,
+                    modifier = Modifier
+                        .size(80.dp)
+                        .clip(RoundedCornerShape(12.dp))
                 )
             }
             Spacer(modifier = Modifier.width(16.dp))

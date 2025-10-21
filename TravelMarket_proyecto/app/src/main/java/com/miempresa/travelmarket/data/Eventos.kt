@@ -1,5 +1,7 @@
 package com.miempresa.travelmarket.data
 
+import com.miempresa.travelmarket.R
+
 data class Evento(
     val nombre: String,
     val descripcion: String,val fecha: String,
@@ -16,7 +18,7 @@ fun getEventos(): List<Evento> {
             "26 de Julio, 2025",
             "19:00 hrs",
             "6.1 km",
-            null
+            R.drawable.ceremonia
         ),
         Evento(
             "Natación - Competencias",
@@ -24,7 +26,7 @@ fun getEventos(): List<Evento> {
             "2 de Agosto, 2025",
             "09:00 hrs",
             "5.3 km",
-            null
+            R.drawable.natacion
         ),
         Evento(
             "Voleibol de Playa",
@@ -32,7 +34,7 @@ fun getEventos(): List<Evento> {
             "5 de Agosto, 2025",
             "15:00 hrs",
             "8.9 km",
-            null
+            R.drawable.voley
         ),
         Evento(
             "Final Baloncesto Masculino",
@@ -40,7 +42,7 @@ fun getEventos(): List<Evento> {
             "10 de Agosto, 2025",
             "20:00 hrs",
             "3.2 km",
-            null
+            R.drawable.baloncesto
         )
     )
 }
