@@ -106,7 +106,6 @@ Desarrollar una aplicación móvil Android donde los turistas puedan descubrir l
 | **RF30** | La aplicación debe representar correctamente la propuesta del prototipo inicial. |
 
 ---
-[🎥 Ver demo del proyecto](https://drive.google.com/file/d/1tbRU1tTw-P9zUGOk-HcFtruBk26ZeLDQ/view?usp=sharing)
 
 ## ⚙️ Funcionalidades Implementadas
 
@@ -122,7 +121,9 @@ Desarrollar una aplicación móvil Android donde los turistas puedan descubrir l
 - Control de versiones colaborativo con Git y GitHub.
 
 ---
-[🎥 Ver demo del proyecto](https://drive.google.com/file/d/1RoRH6Mboyn79nNj7Go40HQtZuKW4n-zY/view?usp=sharing)
+
+[🎥 Ver demo del proyecto](https://drive.google.com/file/d/1tbRU1tTw-P9zUGOk-HcFtruBk26ZeLDQ/view?usp=sharing)
+
 
 ## 📸 Capturas de pantalla
 
